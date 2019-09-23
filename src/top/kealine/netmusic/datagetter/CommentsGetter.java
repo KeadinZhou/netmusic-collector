@@ -25,6 +25,7 @@ public class CommentsGetter {
         ArrayList<BeanComment> list = new ArrayList<>();
 
         String url = Settings.host + "/music/comments?id=" + song_id;
+        Settings.log(url);
         String json = HTTPUtil.get(url);
 
         JSONObject data = new JSONObject(json);

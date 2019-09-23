@@ -12,7 +12,7 @@ public class SongGetter {
 
         item.setId(data.getLong("id"));
         item.setName(data.getString("name"));
-        item.setSingers(SinggerGetter.run(data.getJSONArray("ar")));
+        item.setSingers(SingerGetter.run(data.getJSONArray("ar")));
         item.setLrc(LrcGetter.run(item.getId()));
         item.setComments(CommentsGetter.run(item.getId()));
         item.setComments_cnt(CommentsGetter.comment_cnt);
@@ -25,12 +25,13 @@ public class SongGetter {
 
     public static BeanSong run(long song_id){
         String url = Settings.host + "/music/detail?id=" + song_id;
+        Settings.log(url);
         String json = HTTPUtil.get(url);
         return build((new JSONObject(json)).getJSONArray("songs").getJSONObject(0));
     }
 
     public static void main(String[] args) {
-        BeanSong testData = run(1338414110);
+        BeanSong testData = run(484692395);
         System.out.println(testData);
     }
 }

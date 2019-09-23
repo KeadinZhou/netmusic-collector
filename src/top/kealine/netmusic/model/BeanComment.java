@@ -6,6 +6,7 @@ public class BeanComment {
     private long like;
     private long time;
     private long user_id;
+    private long song_id;
     private String json;
 
     public long getId() {
@@ -54,5 +55,13 @@ public class BeanComment {
 
     public void setJson(String json) {
         this.json = json;
+    }
+
+    public long getSong_id() {
+        return song_id;
+    }
+
+    public void setSong_id(long song_id) {
+        this.song_id = song_id;
     }
 }

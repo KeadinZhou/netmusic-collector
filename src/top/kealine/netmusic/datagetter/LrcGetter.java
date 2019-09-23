@@ -6,6 +6,7 @@ import top.kealine.netmusic.util.HTTPUtil;
 public class LrcGetter {
     public static String run(long song_id){
         String url = Settings.host + "/lyric?id=" + song_id;
+        Settings.log(url);
         String json = HTTPUtil.get(url);
         return json;
     }

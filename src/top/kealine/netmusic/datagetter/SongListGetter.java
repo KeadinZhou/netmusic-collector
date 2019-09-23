@@ -28,6 +28,7 @@ public class SongListGetter {
 
     private static void getSongs(long playlistId) {
         String url = Settings.host + "/playlist/detail?id=" + playlistId;
+        Settings.log(url);
         String json = HTTPUtil.get(url);
         System.out.println("[System] - " + (new Date()).toString() + " - GET " + url); //LOG
         JSONObject data = (new JSONObject(json)).getJSONObject("playlist");

@@ -23,7 +23,15 @@ public class UserGetter {
 
     public static BeanUser run(long user_id){
         String url = Settings.host + "/user/detail?id=" + user_id;
+        Settings.log(url);
         String json = HTTPUtil.get(url);
+
+//        try {
+//            Thread.sleep(300);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+
         return build(new JSONObject(json));
     }
 

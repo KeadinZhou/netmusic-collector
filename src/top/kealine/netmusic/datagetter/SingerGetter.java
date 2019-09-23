@@ -6,7 +6,7 @@ import top.kealine.netmusic.model.BeanSinger;
 
 import java.util.ArrayList;
 
-public class SinggerGetter {
+public class SingerGetter {
     public static BeanSinger build(JSONObject data){
         BeanSinger item = new BeanSinger();
         item.setId(data.getLong("id"));
