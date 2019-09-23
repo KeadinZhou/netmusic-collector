@@ -1,5 +1,6 @@
 package top.kealine.netmusic.datagetter;
 
+import top.kealine.netmusic.Settings;
 import top.kealine.netmusic.model.BeanComment;
 import top.kealine.netmusic.model.BeanSinger;
 import top.kealine.netmusic.model.BeanSong;
@@ -17,6 +18,7 @@ public class SongSaver {
     private static final String CHECK_SONG_SQL = "SELECT song_id FROM song WHERE song_id=?";
     private static final String CHECK_SINGER_SQL = "SELECT singer_id FROM singer WHERE singer_id=?";
     private static final String CHECK_USER_SQL = "SELECT user_id FROM user WHERE user_id=?";
+    private static final String CHECK_COMMENT_SQL = "SELECT comment_id FROM comment WHERE comment_id=?";
     private static final String SAVE_SONG_SQL = "INSERT INTO song(song_id,song_name,song_lrc,comments_cnt,song_url,publish_time,json) VALUES (?,?,?,?,?,?,?)";
     private static final String SAVE_SINGER_SQL = "INSERT INTO singer(singer_id,singer_name) VALUES (?,?)";
     private static final String SAVE_COMMENT_SQL = "INSERT INTO comment(comment_id,content,like_cnt,time,user_id,song_id,json) VALUES (?,?,?,?,?,?,?)";
@@ -25,6 +27,7 @@ public class SongSaver {
     private static PreparedStatement psSongChecker = null;
     private static PreparedStatement psSingerChecker = null;
     private static PreparedStatement psUserChecker = null;
+    private static PreparedStatement psCommentChecker = null;
     private static PreparedStatement psSongSaver = null;
     private static PreparedStatement psSingerSaver = null;
     private static PreparedStatement psCommentSaver = null;
@@ -36,6 +39,7 @@ public class SongSaver {
         if(checker.next()) return;
 
         BeanUser user = UserGetter.run(user_id);
+        if(user.getId() == 0) return;
         psUserSaver.setLong(1,user_id);
         psUserSaver.setString(2,user.getNickname());
         psUserSaver.setLong(3,user.getBirthday());
@@ -55,7 +59,11 @@ public class SongSaver {
         psCommentSaver.setLong(5,comment.getUser_id());
         psCommentSaver.setLong(6,song_id);
         psCommentSaver.setString(7,comment.getJson());
-        saveUser(comment.getUser_id());
+        // saveUser(comment.getUser_id());
+
+        psCommentChecker.setLong(1,comment.getId());
+        ResultSet checker = psCommentChecker.executeQuery();
+        if (checker.next()) return;
         psCommentSaver.execute();
     }
     private static void saveSinger(BeanSinger singer) throws SQLException {
@@ -104,6 +112,7 @@ public class SongSaver {
             psSongChecker = conn.prepareStatement(CHECK_SONG_SQL);
             psSingerChecker = conn.prepareStatement(CHECK_SINGER_SQL);
             psUserChecker = conn.prepareStatement(CHECK_USER_SQL);
+            psCommentChecker = conn.prepareStatement(CHECK_COMMENT_SQL);
             psSongSaver = conn.prepareStatement(SAVE_SONG_SQL);
             psSingerSaver = conn.prepareStatement(SAVE_SINGER_SQL);
             psCommentSaver = conn.prepareStatement(SAVE_COMMENT_SQL);
@@ -121,6 +130,7 @@ public class SongSaver {
                 if(checker.next()) continue;
 
                 BeanSong song = SongGetter.run(id);
+                if(song.getId() == 0) continue;
                 saveSong(song);
                 // if(cnt>=10) break; //Limit
             }
@@ -130,6 +140,17 @@ public class SongSaver {
 
     }
     public static void main(String[] args) {
-        run();
+        while(true){
+            try{
+                run();
+            }catch (Exception e){
+                try {
+                    Settings.eLog(e);
+                } catch (Exception ee){
+                    e.printStackTrace();
+                    ee.printStackTrace();
+                }
+            }
+        }
     }
 }

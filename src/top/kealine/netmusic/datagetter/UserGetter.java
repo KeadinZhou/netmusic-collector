@@ -9,7 +9,12 @@ public class UserGetter {
     private static BeanUser build(JSONObject user){
         BeanUser data = new BeanUser();
         data.setJson(user.toString());
-        user = user.getJSONObject("profile");
+        try {
+            user = user.getJSONObject("profile");
+        } catch (Exception e){
+            data.setId(0);
+            return data;
+        }
         data.setId(user.getLong("userId"));
         data.setNickname(user.getString("nickname"));
         data.setBirthday(user.getLong("birthday"));

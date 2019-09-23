@@ -27,7 +27,11 @@ public class SongGetter {
         String url = Settings.host + "/music/detail?id=" + song_id;
         Settings.log(url);
         String json = HTTPUtil.get(url);
-        return build((new JSONObject(json)).getJSONArray("songs").getJSONObject(0));
+        try{
+            return build((new JSONObject(json)).getJSONArray("songs").getJSONObject(0));
+        } catch (Exception e){
+            return new BeanSong();
+        }
     }
 
     public static void main(String[] args) {
