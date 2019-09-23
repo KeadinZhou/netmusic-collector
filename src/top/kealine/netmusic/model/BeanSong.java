@@ -9,7 +9,26 @@ public class BeanSong {
     private String lrc;
     private long comments_cnt;
     private ArrayList<BeanComment> comments;
+    private String url;
+    private long publish_time;
     private String json;
+
+    public long getPublish_time() {
+        return publish_time;
+    }
+
+    public void setPublish_time(long publish_time) {
+        this.publish_time = publish_time;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
 
     public long getId() {
         return id;
