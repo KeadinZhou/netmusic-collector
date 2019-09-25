@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 public class SongSaver {
     private static final String GET_SONG_LIST_SQL = "SELECT DISTINCT song_id FROM songs_belong";
@@ -119,6 +121,9 @@ public class SongSaver {
             psUserSaver = conn.prepareStatement(SAVE_USER_SQL);
             psSingerSingSaver = conn.prepareStatement(SAVE_SINGERS_SING_SQL);
             ResultSet rs = ps.executeQuery();
+
+            Random R = new Random();
+
             int cnt = 0;
             while(rs.next()){
                 cnt++;
@@ -128,6 +133,12 @@ public class SongSaver {
                 psSongChecker.setLong(1,id);
                 ResultSet checker = psSongChecker.executeQuery();
                 if(checker.next()) continue;
+
+                int p = R.nextInt(6);
+                if(p==5){
+                    System.out.println("[Thread] - "+ (new Date()).toString() +" -Sleeping...");
+                    Thread.sleep(10000);
+                }
 
                 BeanSong song = SongGetter.run(id);
                 if(song.getId() == 0) continue;
